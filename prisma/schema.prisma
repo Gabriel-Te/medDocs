@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model exams {
+  id            Int             @id @default(autoincrement())
+  date          DateTime        @default(now()) @db.Timestamp(0)
+  exams_metrics exams_metrics[]
+}
+
+model exams_metrics {
+  exams_id   Int
+  metrics_id Int
+  id         String  @id @db.VarChar(45)
+  exams      exams   @relation(fields: [exams_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_exams_metrics_exams")
+  metrics    metrics @relation(fields: [metrics_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_exams_metrics_metrics1")
+
+  @@index([exams_id], map: "fk_exams_metrics_exams_idx")
+  @@index([metrics_id], map: "fk_exams_metrics_metrics1")
+}
+
+model metrics {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(100)
+  unit          String          @db.VarChar(45)
+  exams_metrics exams_metrics[]
+}
