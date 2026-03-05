@@ -2,7 +2,7 @@ import { Prisma, exams, exams_metrics } from "@prisma/client"
 import { prisma } from "./infra/mysql.adapter"
 import { IPrismaExamsModel } from "./interfaces/IPrismaExamsModel";
 
-export class PrismaexamsModel implements IPrismaExamsModel {
+export class PrismaExamsModel implements IPrismaExamsModel {
     async create(quantity: number, metricId: number) {
         return await prisma.exams.create({
             data: {
@@ -54,13 +54,13 @@ export class PrismaexamsModel implements IPrismaExamsModel {
                 quantity: quantity
             }
         })
-    }
+    }//CERTOOOOO
 
     async remove(id: number): Promise<exams> {
         return await prisma.exams.delete({
             where: { id: id }
         })
-    }
+    }//Certo
 
     async edit(id: number, data: Prisma.examsCreateInput): Promise<exams> {
         return await prisma.exams.update({
@@ -69,5 +69,5 @@ export class PrismaexamsModel implements IPrismaExamsModel {
                 date: data.date,
             }
         })
-    }
+    }//Não testado pois não vi necessidade
 }
