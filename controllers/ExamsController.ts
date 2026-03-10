@@ -85,7 +85,7 @@ export class ExamsController {
 
     async addMetric(req: Request, res: Response) {
         try {
-            const {id, metricId, quantity} = req.body;
+            const { id, metricId, quantity } = req.body;
 
             const Exams = await this.prismaExamsModel.addMetric(Number(id), Number(metricId), Number(quantity));
             return res.status(201).json({
@@ -100,10 +100,40 @@ export class ExamsController {
         }
     } //certo
 
+    async getWithFilter(req: Request, res: Response) {
+        try {
+
+            const { initialDate, finalDate, metricsName } = req.body
+
+            const Exams = await this.prismaExamsModel.findByFilter(
+                initialDate,
+                finalDate,
+                metricsName? metricsName.replace(/\s/g, '').split(",") : []
+            );
+
+            if (!Exams || Exams.length === 0) {
+                return res.status(404).json({
+                    message: "Nenhumo exame encontrada"
+                })
+            }
+
+            return res.status(200).json({
+                message: "Sucesso ao encontrar os exames",
+                Exams
+            })
+        } catch (error: any) {
+            return res.status(500).json({
+                message: "Erro ao encontrar os exames",
+                exc: error.message
+            })
+        }
+    }//certo
+
 
 
     async edit(req: Request, res: Response) {
         try {
+
             const id = Number(req.params.id);
             const ExamsForm = req.body;
             console.log(ExamsForm)
@@ -119,4 +149,4 @@ export class ExamsController {
             })
         }
     }
-}
+}  

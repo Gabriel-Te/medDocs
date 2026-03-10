@@ -1,6 +1,7 @@
 import { Prisma, exams, exams_metrics } from "@prisma/client"
 import { prisma } from "./infra/mysql.adapter"
 import { IPrismaExamsModel } from "./interfaces/IPrismaExamsModel";
+import { formatPrismaRequisition } from "./helpers/formatPrismaRequisition";
 
 export class PrismaExamsModel implements IPrismaExamsModel {
     async create(quantity: number, metricId: number) {
@@ -14,7 +15,7 @@ export class PrismaExamsModel implements IPrismaExamsModel {
                 }
             }
         })
-    }
+    }//certo
 
     async findAll(): Promise<exams[] | null> {
         return await prisma.exams.findMany({
@@ -22,13 +23,14 @@ export class PrismaExamsModel implements IPrismaExamsModel {
                 exams_metrics: {
                     select: {
                         metrics_id: true,
+                        metrics: { select: { name: true } },
                         quantity: true
                     }
                 }
             }
         });
 
-    }
+    }//certo
 
     async findById(id: number): Promise<any | null> { //mudar depois para melhor tipagem
         return await prisma.exams.findUnique({
@@ -39,22 +41,28 @@ export class PrismaExamsModel implements IPrismaExamsModel {
                     where: { exams_id: id },
                     select: {
                         metrics_id: true,
+                        metrics: { select: { name: true } },
                         quantity: true
                     }
                 }
             }
         })
-    }
+    }//certo
 
     async addMetric(id: number, metricId: number, quantity: number): Promise<exams_metrics | null> { //mudar depois para melhor tipagem
         return await prisma.exams_metrics.create({
-            data:  {
+            data: {
                 exams_id: id,
                 metrics_id: metricId,
                 quantity: quantity
             }
         })
     }//CERTOOOOO
+
+    async findByFilter(initialDate: Date, finalDate: Date, metricsName: string[]): Promise<exams[] | null> {
+        return await prisma.exams.findMany(formatPrismaRequisition(initialDate, finalDate, metricsName));
+    }
+
 
     async remove(id: number): Promise<exams> {
         return await prisma.exams.delete({
@@ -69,5 +77,5 @@ export class PrismaExamsModel implements IPrismaExamsModel {
                 date: data.date,
             }
         })
-    }//Não testado pois não vi necessidade
+    }//certo
 }
