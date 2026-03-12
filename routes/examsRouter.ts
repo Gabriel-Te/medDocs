@@ -1,9 +1,13 @@
 import { Router } from "express";
 import { ExamsController } from "../controllers/ExamsController";
+import { AuthMiddleware } from "../controllers/middlewares/authMiddleware";
 
 const examsRouter = Router();
 
 const examsController = new ExamsController();
+const authMiddleware = new AuthMiddleware();
+
+// examsRouter.use(authMiddleware.execute.bind(authMiddleware));
 
 examsRouter.post("/create", examsController.handle.bind(examsController));
 examsRouter.get("/", examsController.getAll.bind(examsController));

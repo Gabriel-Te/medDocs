@@ -30,3 +30,10 @@ model metrics {
   unit          String          @db.VarChar(45)
   exams_metrics exams_metrics[]
 }
+
+model users {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar(100)
+  password          String          @db.VarChar(100)
+  refresh_token   String? @db.VarChar(512)
+}

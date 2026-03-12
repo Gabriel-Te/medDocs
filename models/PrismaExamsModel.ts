@@ -23,7 +23,7 @@ export class PrismaExamsModel implements IPrismaExamsModel {
                 exams_metrics: {
                     select: {
                         metrics_id: true,
-                        metrics: { select: { name: true } },
+                        metrics: { select: { name: true, unit: true } },
                         quantity: true
                     }
                 }
@@ -41,8 +41,9 @@ export class PrismaExamsModel implements IPrismaExamsModel {
                     where: { exams_id: id },
                     select: {
                         metrics_id: true,
-                        metrics: { select: { name: true } },
-                        quantity: true
+                        metrics: { select: { name: true, unit: true } },
+                        quantity: true,
+                        
                     }
                 }
             }
@@ -74,7 +75,7 @@ export class PrismaExamsModel implements IPrismaExamsModel {
         return await prisma.exams.update({
             where: { id: id },
             data: {
-                date: data.date,
+                date: `${data.date}T00:00:00.000Z`,
             }
         })
     }//certo

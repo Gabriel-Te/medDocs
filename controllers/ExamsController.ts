@@ -29,7 +29,7 @@ export class ExamsController {
 
             if (!Exams || Exams.length === 0) {
                 return res.status(404).json({
-                    message: "Nenhumo exame encontrada"
+                    message: "Nenhum exame encontrado"
                 })
             }
 

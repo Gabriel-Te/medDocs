@@ -23,22 +23,22 @@ export function formatPrismaRequisition(
         };
     }
 
-    // 2. Montamos o objeto final garantindo a hierarquia correta
     const requisition = {
         where: whereConditions,
         include: {
             exams_metrics: {
-                // Filtramos o include também para trazer apenas as métricas solicitadas
                 where: metricsName.length > 0 ? {
                     metrics: {
                         name: { in: metricsName }
                     }
+
                 } : {},
                 select: {
                     metrics_id: true,
-                    metrics: { 
-                        select: { name: true } 
-                    }
+                    metrics: {
+                        select: { name: true, unit: true }
+                    },
+                    quantity: true,
                 }
             }
         }

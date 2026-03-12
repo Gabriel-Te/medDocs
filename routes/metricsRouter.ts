@@ -1,9 +1,14 @@
 import { Router } from "express";
 import { MetricsController } from "../controllers/MetricsController";
+import { AuthMiddleware } from "../controllers/middlewares/authMiddleware";
+import examsRouter from "./examsRouter";
 
 const metricsRouter = Router();
 
 const metricsController = new MetricsController();
+const authMiddleware = new AuthMiddleware();
+
+// metricsRouter.use(authMiddleware.execute.bind(authMiddleware));
 
 metricsRouter.post("/create", metricsController.handle.bind(metricsController));
 metricsRouter.get("/", metricsController.getAll.bind(metricsController));
