@@ -67,7 +67,7 @@ export class UsersController {
                 })
             }
 
-            const accessToken = jwt.sign({ id: user?.id }, secret , { expiresIn: '10m' }); // 1 minuto para testar rápido
+            const accessToken = jwt.sign({ id: user?.id }, secret , { expiresIn: '1h' });
             const refreshToken = jwt.sign({ id: user?.id }, secret, { expiresIn: '7d' });
 
             await this.prismaUserModel.addRefreshToken(user.id, refreshToken);
@@ -92,15 +92,12 @@ export class UsersController {
 
         if (!refreshToken) return res.sendStatus(401);
 
-        // 1. Verifique se o refresh token existe no seu Banco de Dados
-        // Isso permite que você "deslogue" o usuário invalidando o token no banco
         const user = await this.prismaUserModel.findByRefreshToken(refreshToken);
         if (!user) return res.sendStatus(403);
 
         const secret = process.env.SECRET;
         if (!secret) return res.sendStatus(500);
 
-        // 2. Valida o token com a chave secreta de refresh
         jwt.verify(refreshToken, secret, (err: any, decoded: any) => {
             if (err) return res.sendStatus(403);
 

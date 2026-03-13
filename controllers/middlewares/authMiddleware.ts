@@ -19,7 +19,7 @@ export class AuthMiddleware {
 
         try {
             const decoded = jwt.verify(token, process.env.SECRET || 'sua_chave_secreta');
-
+            
             return next();
         } catch (err) {
             return res.status(401).json({ message: "Token inválido ou expirado" });
